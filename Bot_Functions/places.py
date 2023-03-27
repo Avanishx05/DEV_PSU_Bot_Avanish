@@ -69,8 +69,6 @@ def find_places_nearby(location, search_string, preference):
     else:
         return 'invalid preference'
 
-    return response
-
 #create final_list to store the results systematically
     final_list = {}
 
@@ -100,3 +98,14 @@ def find_places_nearby(location, search_string, preference):
         result_string += "in"
     else:
         result_string += "near"
+
+    if location == "me":
+        result_string = result_string + " " + "you" + " " + "are: \n"
+    else:
+        result_string = result_string + " " + location + " " + "are: \n"
+
+    i = 1
+    for place in final_list.keys():
+        result_string += str(i) + ". " + place + ", " + "Phone: " + final_list[place][0] + ", " "Rating: " + str(final_list[place][1]) + ".\n"
+        i += 1
+    return result_string

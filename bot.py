@@ -2,7 +2,7 @@ import os
 import discord
 from dotenv import load_dotenv
 
-from Bot_Functions import translate
+from Bot_Functions import translate, places
 
 load_dotenv()
 token = os.getenv('TOKEN')
@@ -56,7 +56,34 @@ class DevPSUBot(discord.Client):
             
                 await message.channel.send(translate.translator_func(msg))
 
+        #places
+        if 'find' in message.content.lower():
+            #find (search_string) (verb) (location)
+            message_list = message.content.lower().split()
+            print(message)
+            index = message_list.index("find")
+            #set search string
+            search_string = ""
+            index += 1
+            while message_list[index] != "near" and message_list[index] != "in":
+                search_string = search_string + message_list[index]
+                index += 1
 
+            #set preference
+            if message_list[index] == "near":
+                preference = "distance"
+            preference = "popularity"
+            index += 1
+
+            #set location
+            location = ""
+            while index < len(message_list):
+                if index != len(message_list) -1:
+                    location += message_list[index] + " "
+                else:
+                    location += message_list[index]
+                index += 1
+            await message.channel.send(places.find_places_nearby(location, search_string, preference))
     
     async def on_typing(self, channel, user, when):
         print(f"{user} is typing in {channel} at {when}")
