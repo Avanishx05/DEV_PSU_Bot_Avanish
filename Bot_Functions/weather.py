@@ -1,4 +1,4 @@
-import places
+from Bot_Functions import places
 from dotenv import load_dotenv
 import os
 import requests
@@ -9,7 +9,7 @@ def find_weather(location, units):
     location = places.get_location(location)
     lat = location[0]
     lon = location[1]
-    print(location[0])
+
     if location == "invalid":
         return "Invalid Location"
     # base_url variable to store url
@@ -21,8 +21,23 @@ def find_weather(location, units):
 
     # get method of requests module
     # return response object
-    response = requests.get(complete_url).json()
-    print(response)
-    #report = response.json()['main']
-
-find_weather('statecollege', 'imperial')
+    response = requests.get(complete_url)
+    report = response.json()
+    if units == 'imperial':
+        return ("temperature: "+ str(report['main']['temp']) + "°F"+ "\n" + 
+            "feels like: "+ str(report['main']['feels_like']) + "°F"+ "\n" + 
+            "Minimum temperature: " + str(report['main']['temp_min']) + "°F"+ "\n" +
+            "Maximum temperature: " + str(report['main']['temp_max']) + "°F")
+    
+    #metric
+    if units == 'metric':
+        return ("temperature: "+ str(report['main']['temp']) + "°C"+ "\n" + 
+            "feels like: "+ str(report['main']['feels_like']) + "°C"+ "\n" + 
+            "Minimum temperature: " + str(report['main']['temp_min']) + "°C"+ "\n" +
+            "Maximum temperature: " + str(report['main']['temp_max']) + "°C")
+    #standard
+    if units == 'standard':
+        return ("temperature: "+ str(report['main']['temp']) + "K"+ "\n" + 
+            "feels like: "+ str(report['main']['feels_like']) + "K"+ "\n" + 
+            "Minimum temperature: " + str(report['main']['temp_min']) + "K"+ "\n" +
+            "Maximum temperature: " + str(report['main']['temp_max']) + "K")
